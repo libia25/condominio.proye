@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Contraseña</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles3.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cargar.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Condominio.ico' %}">
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="recovery-header">
+            Cambiar Contraseña
+        </div>
+
+        <form method="post" action="{% url 'condominio:cambiar_contraseña' uidb64=uidb64 token=token %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="new_password1" class="form-label">Nueva Contraseña</label>
+                {{ form.new_password1 }}
+            </div>
+            <div class="mb-3">
+                <label for="new_password2" class="form-label">Confirmar Contraseña</label>
+                {{ form.new_password2 }}
+            </div>
+            <button type="submit" class="btn btn-custom w-100">Cambiar Contraseña</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('loading-screen').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

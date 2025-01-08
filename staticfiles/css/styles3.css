@@ -1,0 +1,70 @@
+body {
+    background-image: url('/static/img/Condominio.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal del formulario */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Encabezado */
+.recovery-header {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Estilo para los inputs */
+.form-control {
+    border-radius: 8px;
+    font-size: 1rem;
+    padding: 10px;
+}
+
+/* Botón personalizado */
+.btn-custom {
+    background-color: #34495e;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 1rem;
+    padding: 10px 0;
+    transition: background-color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #2c3e50;
+}
+
+/* Mensajes de error */
+.alert-info {
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+/* Texto de pie de página */
+.text-muted {
+    font-size: 0.8rem;
+}
+/* Estilos personalizados para los mensajes */
+.alert-success {
+    background-color: #28a745 !important; /* Verde */
+    color: white !important;
+}
+
+.alert-danger {
+    background-color: #dc3545 !important; /* Rojo */
+    color: white !important;
+}

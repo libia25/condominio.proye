@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Residente</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cargar.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Condominio.ico' %}">
+    <script src="/static/app/documento.js"></script>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="alert alert-success mt-3">{{ message }}</div> <!-- Success message in green -->
+        {% else %}
+            <div class="alert alert-danger mt-3">{{ message }}</div> <!-- Error message in red -->
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                Registro de Residente
+            </div>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <label for="id_nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="id_nombre" name="nombre" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="id_apellido" name="apellido" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_username" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="id_username" name="username" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_documento_identidad" class="form-label">Documento de Identidad</label>
+                        <input type="text" class="form-control" id="id_documento_identidad" name="documento_identidad" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_nacionalidad" class="form-label">Nacionalidad</label>
+                        <select class="form-control" id="id_nacionalidad" name="nacionalidad" required onchange="actualizarDocumento()">
+                            <option value="">Seleccione su nacionalidad</option>
+                            <option value="V">Venezolano</option>
+                            <option value="E">Extranjero</option>
+                        </select>
+                    </div>
+                    <!-- Campo de correo electrónico -->
+                    <div class="col-md-6">
+                        <label for="id_email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="id_email" name="email" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_telefono" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="id_telefono" name="telefono" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="id_password" name="password" required value="">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_password_confirm" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="id_password_confirm" name="password_confirm" required value="">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="id_departamento" class="form-label">Departamento</label>
+                        <select class="form-control" id="id_departamento" name="departamento" required>
+                            <option value="">Seleccione un departamento</option>
+                            {% for departamento in departamentos %}
+                                <option value="{{ departamento.id }}">{{ departamento.numero }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                {% if error %}
+                    <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-custom w-100">Registrar</button>
+                </div>
+                <div class="form-footer">
+                    Todos los campos son obligatorios
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/app/app1.js"></script>
+    <script src="/static/app/app2.js"></script>
+
+</body>
+</html>

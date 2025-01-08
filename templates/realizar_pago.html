@@ -1,0 +1,201 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizar Pago</title>
+    <link rel="stylesheet" href="{% static 'css/realizar_pago.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cargar.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Condominio.ico' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        input[disabled] {
+            background-color: #e9ecef;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-back {
+            display: block;
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Realizar Pago</h1>
+</header>
+
+<div class="container">
+    <!-- Formulario de Pago -->
+    <h2>Detalles de Pago</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Información del Departamento -->
+        <div class="form-group">
+            <label for="departamento">Departamento</label>
+            <input type="text" id="departamento" name="departamento" value="{{ departamento.numero }}" disabled>
+        </div>
+
+        <!-- Lista de Servicios -->
+        <div class="form-group">
+            <label for="servicios">Servicios</label>
+            <select id="servicios" name="servicios" multiple onchange="calcularTotal()">
+                {% for servicio in servicios %}
+                    <option value="{{ servicio.id }}" data-monto="{{ servicio.monto }}">
+                        {{ servicio.descripcion }} - ${{ servicio.monto }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Lista de Mantenimientos -->
+        <div class="form-group">
+            <label for="mantenimientos">Mantenimientos Pendientes</label>
+            <select id="mantenimientos" name="mantenimientos" multiple onchange="calcularTotal()">
+                {% for mantenimiento in mantenimientos %}
+                    <option value="{{ mantenimiento.id }}" data-monto="{{ mantenimiento.monto }}">
+                        {{ mantenimiento.descripcion }} - ${{ mantenimiento.monto }} ({{ mantenimiento.estado }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Total a Pagar -->
+        <div class="form-group">
+            <label for="total_a_pagar">Total a Pagar</label>
+            <input type="text" id="total_a_pagar" name="total_a_pagar" value="0" disabled>
+        </div>
+
+        <!-- Monto Pagado -->
+        <div class="form-group">
+            <label for="monto_pagado">Monto Pagado</label>
+            <input type="number" id="monto_pagado" name="monto_pagado" min="0" oninput="actualizarSaldo()" required>
+        </div>
+
+        <!-- Saldo Pendiente -->
+        <div class="form-group">
+            <label for="saldo_pendiente">Saldo Pendiente</label>
+            <input type="text" id="saldo_pendiente" name="saldo_pendiente" value="{{ total_pendiente|floatformat:2 }}" disabled>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="form-group">
+            <label for="metodo_pago">Método de Pago</label>
+            <select id="metodo_pago" name="metodo_pago" required>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                <option value="Efectivo">Efectivo</option>
+            </select>
+        </div>
+
+        <!-- Fecha del Pago -->
+        <div class="form-group">
+            <label for="fecha_pago">Fecha del Pago</label>
+            <input type="date" id="fecha_pago" name="fecha_pago" readonly>
+        </div>
+
+        <!-- Botón de Enviar -->
+        <button type="submit" class="btn">Realizar Pago</button>
+    </form>
+
+    <!-- Botón Volver -->
+    <a href="{% url 'condominio:dashboard' %}" class="btn btn-back">Volver al Dashboard</a>
+</div>
+
+<script>
+    let saldoPendiente = 0;
+
+    function calcularTotal() {
+        let total = 0;
+
+        // Calcular total por servicios seleccionados
+        document.querySelectorAll('#servicios option:checked').forEach(function(option) {
+            total += parseFloat(option.getAttribute('data-monto'));
+        });
+
+        // Calcular total por mantenimientos seleccionados
+        document.querySelectorAll('#mantenimientos option:checked').forEach(function(option) {
+            total += parseFloat(option.getAttribute('data-monto'));
+        });
+
+        // Actualizar el campo "Total a Pagar"
+        document.getElementById('total_a_pagar').value = total.toFixed(2);
+        saldoPendiente = total; // Inicializamos el saldo pendiente con el total a pagar
+        actualizarSaldo(); // Actualizamos el saldo pendiente en la UI
+    }
+
+    function actualizarSaldo() {
+        let montoPagado = parseFloat(document.getElementById('monto_pagado').value) || 0;
+        let saldoRestante = saldoPendiente - montoPagado;
+
+        // Actualizamos el saldo pendiente en la interfaz
+        document.getElementById('saldo_pendiente').value = saldoRestante.toFixed(2);
+    }
+
+    // Establecer la fecha actual automáticamente en el campo "Fecha del Pago"
+    window.onload = function() {
+        calcularTotal();
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha_pago').value = today;
+    };
+</script>
+
+</body>
+</html>

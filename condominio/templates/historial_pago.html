@@ -1,0 +1,65 @@
+{% extends 'historial_pago.html' %}
+
+{% block title %}Historial de Pagos y Facturas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Historial de Pagos y Facturas</h1>
+
+    <div class="mb-5">
+        <h2>Pagos Realizados</h2>
+        {% if pagos %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Monto Pagado</th>
+                        <th>Método</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                        <tr>
+                            <td>${{ pago.monto_pagado }}</td>
+                            <td>{{ pago.metodo_pago }}</td>
+                            <td>{{ pago.fecha_emision }}</td>
+                            <td>{{ pago.estado }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay pagos registrados.</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2>Facturas</h2>
+        {% if facturas %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in facturas %}
+                        <tr>
+                            <td>{{ factura.descripcion }}</td>
+                            <td>${{ factura.monto_total }}</td>
+                            <td>{{ factura.estado }}</td>
+                            <td>{{ factura.fecha }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay facturas registradas.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

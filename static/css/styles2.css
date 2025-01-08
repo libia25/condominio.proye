@@ -1,0 +1,74 @@
+/* Estilo global para el fondo */
+body {
+    background-image: url('/static/img/Condominio.jpg'); /* Ruta para Django */
+    background-size: cover; /* Cubre todo el fondo */
+    background-attachment: fixed; /* Imagen fija al desplazarse */
+    background-position: center; /* Centrado */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Contenedor del formulario */
+.login-container {
+    max-width: 400px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco ligeramente transparente */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+    margin: 50px auto;
+    padding: 40px 30px;
+}
+
+/* Estilo del logo */
+.logo {
+    display: block;
+    margin: 0 auto 20px; /* Centrado y margen inferior */
+    max-width: 120px; /* Ajusta el tamaño máximo del logo */
+    height: auto; /* Mantiene las proporciones del logo */
+}
+
+/* Estilo del encabezado */
+.login-header {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Estilo de etiquetas y controles */
+.form-label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.form-control {
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+/* Botón personalizado */
+.btn-custom {
+    background-color: #34495e;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.btn-custom:hover {
+    background-color: #2c3e50;
+}
+
+/* Enlace de recuperar contraseña */
+.text-center a {
+    color: #34495e;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.text-center a:hover {
+    color: #2c3e50;
+    text-decoration: underline;
+}
+
+/* Estilo del formulario */
+.mb-3 {
+    margin-bottom: 1.5rem;
+}

@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Historial de pagos realizados">
+    <meta name="author" content="Tu Nombre o Empresa">
+    <link rel="stylesheet" href="{% static 'css/historial.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cargar.css' %}">
+    <title>Historial de Pagos</title>
+</head>
+<body>
+    <header>
+        <h1>Historial de Pagos</h1>
+    </header>
+
+    <main>
+        <!-- Botones para descargar XML y PDF -->
+        <div class="download-buttons">
+            <button id="downloadXML">Descargar como XML</button>
+            <button id="downloadPDF">Descargar como PDF</button>
+        </div>
+
+        <!-- Tabla de historial de pagos -->
+        <table id="pagosTable">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto Pagado</th>
+                    <th>Estado</th>
+                    <th>Método de Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pago in pagos %}
+                    <tr>
+                        <td>{{ pago.fecha_emision }}</td>
+                        <td>{{ pago.monto_pagado }}</td>
+                        <td>{{ pago.estado }}</td>
+                        <td>{{ pago.metodo_pago }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Condiminio Libia Berrios. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="/static/app/historial.js"></script>
+
+    <!-- Cargar jsPDF y autoTable en el orden correcto -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Asegurándonos de que autoTable se cargue después de jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</body>
+</html>

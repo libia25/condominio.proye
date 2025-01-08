@@ -1,0 +1,63 @@
+body {
+    background-image: url('/static/img/Condominio.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/* Contenedor del formulario */
+.form-container {
+    max-width: 600px; /* Ampliar el tamaño del formulario */
+    margin: 100px auto; /* Centrado */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+/* Encabezado */
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #2c3e50; /* Color para el encabezado */
+}
+
+/* Input y labels */
+.form-label {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* Botón personalizado */
+.btn-custom {
+    background-color: #34495e; /* Color oscuro */
+    color: #fff;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-custom:hover {
+    background-color: #2c3e50; /* Cambio de color en hover */
+}
+
+/* Mensajes de error */
+.text-danger {
+    font-size: 0.9rem;
+    color: #e74c3c;
+}
+
+.form-footer {
+    margin-top: 30px; /* Separación del contenido */
+    text-align: center; /* Centrar el texto */
+    color: #7f8c8d; /* Color gris claro */
+    font-size: 0.9rem; /* Tamaño de texto más pequeño */
+    padding: 15px 0; /* Añadir espacio en el top y bottom */
+    border-top: 1px solid #ddd; /* Línea superior */
+}
+
+/* Agregar margen extra al footer para una separación limpia */
+.form-footer small {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+}

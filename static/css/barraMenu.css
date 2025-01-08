@@ -1,0 +1,104 @@
+/* Barra lateral */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #f39c12;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #34495e;
+    color: #f39c12;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+/* Menú desplegable */
+.sidebar ul li .dropdown-menu {
+    background-color: #34495e;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.sidebar ul li .dropdown-menu .dropdown-item {
+    color: #ecf0f1;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 5px;
+}
+
+.sidebar ul li .dropdown-menu .dropdown-item:hover {
+    background-color: #2c3e50;
+    color: #f39c12;
+    font-weight: bold;
+}
+
+/* Botón destacado */
+.sidebar ul li .dropdown-menu .dropdown-item.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.sidebar ul li .dropdown-menu .dropdown-item.btn-success:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Botón de salir */
+.sidebar ul li form button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.sidebar ul li form button:hover {
+    background-color: #c0392b;
+}
+

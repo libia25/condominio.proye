@@ -1,0 +1,127 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+/* Contenedor principal */
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulario de Pago */
+.form-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Campos de formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.form-group select {
+  background-color: #fafafa;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botones */
+button.btn, 
+a.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+button.btn:hover, 
+a.btn:hover {
+  background-color: #0056b3;
+}
+
+button.btn:focus, 
+a.btn:focus {
+  outline: none;
+}
+
+.btn-back {
+  background-color: #6c757d;
+  width: auto;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.btn-back:hover {
+  background-color: #5a6268;
+}
+
+/* Estilos de los select con múltiple */
+select[multiple] {
+  height: 150px;
+  resize: none;
+}
+
+/* Estilo de mensajes de error o advertencia */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}

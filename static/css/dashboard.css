@@ -1,0 +1,184 @@
+/* Estilo general del cuerpo */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Estructura vertical */
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+main.container {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    flex: 1; /* Llena el espacio restante antes del footer */
+}
+
+/* Encabezados */
+h3, h4 {
+    color: #333;
+}
+
+/* Barra lateral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.sidebar h2 {
+    margin: 0 0 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #f1c40f;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #444;
+}
+
+/* Botones desplegables */
+.sidebar ul li .dropdown-toggle {
+    cursor: pointer;
+}
+
+.sidebar ul li .dropdown-menu {
+    background-color: #444;
+    border: none;
+    margin-top: 5px;
+}
+
+.sidebar ul li .dropdown-menu .dropdown-item {
+    color: #ddd;
+    font-size: 14px;
+    padding: 8px 15px;
+    transition: background-color 0.3s;
+}
+
+.sidebar ul li .dropdown-menu .dropdown-item:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Tablas */
+.table {
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-striped tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Botones */
+.btn {
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    transform: scale(1.05);
+}
+
+/* Formularios */
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+    border-color: #1abc9c;
+    box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+    outline: none;
+}
+
+/* Botón de Enviar */
+form button[type="submit"] {
+    background-color: #1abc9c;
+    color: #ffffff;
+}
+
+form button[type="submit"]:hover {
+    background-color: #16a085;
+}
+
+/* Pago pendiente */
+.text-success {
+    color: #28a745 !important;
+}

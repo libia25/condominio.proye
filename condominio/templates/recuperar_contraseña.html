@@ -1,0 +1,33 @@
+{% extends 'Recuperar_contraseña.html' %} <!-- Cambia 'Recuperar_contraseña.html' si tu archivo base tiene otro nombre -->
+
+{% block title %}Recuperar Contraseña{% endblock %}
+
+{% block heading %}
+<h1>Recuperar Contraseña</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'condominio:recuperar_contraseña' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 btn-custom">Enviar</button>
+</form>
+
+<!-- Mensajes de éxito o error opcionales -->
+<div class="mt-3 text-center">
+    {% if messages %}
+        <div class="alert alert-info mt-3">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="mt-3 text-center">
+    <small class="text-muted">Introduce tu correo para recibir un enlace de recuperación.</small>
+</div>
+{% endblock %}

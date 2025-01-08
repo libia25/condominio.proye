@@ -1,0 +1,26 @@
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.logout-container {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.logout-container h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+.logout-container p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+.logout-container a {
+    text-decoration: none;
+}

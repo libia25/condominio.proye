@@ -35,7 +35,7 @@ admin.site.register(Residente, ResidenteAdmin)
 
 # Personalizando la visualización de los Pagos
 class PagoAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'get_monto', 'get_fecha_emision', 'get_fecha_vencimiento', 'estado', 'get_metodo_pago')
+    list_display = ('usuario', 'get_monto', 'get_fecha_emision', 'estado', 'get_metodo_pago')
 
     def get_monto(self, obj):
         return obj.monto
@@ -51,20 +51,11 @@ class PagoAdmin(admin.ModelAdmin):
         return 'No disponible'
     get_fecha_emision.short_description = 'Fecha de Emisión'
 
-    def get_fecha_vencimiento(self, obj):
-        if obj.fecha_vencimiento:
-            return obj.fecha_vencimiento.strftime('%d-%m-%Y')  # Asegúrate de que la fecha esté en el formato correcto
-        return 'No disponible'
-    get_fecha_vencimiento.short_description = 'Fecha de Vencimiento'
 
 admin.site.register(Pago, PagoAdmin)
 
 class FacturaAdmin(admin.ModelAdmin):
-    list_display = ('departamento', 'monto_total', 'descripcion', 'fecha', 'estado_pago')
-
-    def estado_pago(self, obj):
-        return obj.estado_pago  # Muestra el estado calculado de la factura
-    estado_pago.short_description = 'Estado de Pago'
+    list_display = ('departamento', 'monto_total', 'descripcion', 'fecha', 'estado')
 
 admin.site.register(Factura, FacturaAdmin)
 

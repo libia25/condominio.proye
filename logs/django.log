@@ -6027,3 +6027,86 @@ Not Found: /accounts/login/
 "GET /condominio/ HTTP/1.1" 200 6384
 "GET /static/css/%7B%%20static%20'img/Condominio.jpg'%20%%7D HTTP/1.1" 404 2087
 "GET /condominio/salida/ HTTP/1.1" 200 864
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '192.168.1.112:8000'. You may need to add '192.168.1.112' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.112:8000'. You may need to add '192.168.1.112' to ALLOWED_HOSTS.
+Bad Request: /
+"GET / HTTP/1.1" 400 70958
+Invalid HTTP_HOST header: '192.168.1.112:8000'. You may need to add '192.168.1.112' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.112:8000'. You may need to add '192.168.1.112' to ALLOWED_HOSTS.
+Bad Request: /
+"GET / HTTP/1.1" 200 6384
+"GET /static/css/styles4.css HTTP/1.1" 304 0
+"GET /static/css/cargar.css HTTP/1.1" 304 0
+"GET /static/css/%7B%%20static%20'img/Condominio.jpg'%20%%7D HTTP/1.1" 404 2087
+"GET /static/img/Condominio.ico HTTP/1.1" 304 0
+"GET /condominio/login_residente HTTP/1.1" 200 2772
+"GET / HTTP/1.1" 200 6384
+"GET /condominio/registro_residente HTTP/1.1" 200 5013
+"GET /static/css/styles1.css HTTP/1.1" 304 0
+"GET /static/app/documento.js HTTP/1.1" 304 0
+"GET /static/app/app2.js HTTP/1.1" 304 0
+"GET /static/app/app1.js HTTP/1.1" 304 0
+"GET / HTTP/1.1" 200 6384
+"GET /condominio/login_residente HTTP/1.1" 200 2772
+"GET /condominio/recuperar_contrase%C3%B1a/ HTTP/1.1" 200 2002
+"GET /static/css/styles3.css HTTP/1.1" 200 1472
+"POST /condominio/recuperar_contrase%C3%B1a/ HTTP/1.1" 302 0
+"GET /condominio/login_residente HTTP/1.1" 200 3009
+"POST /condominio/login_residente HTTP/1.1" 302 0
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/realizar_pago/ HTTP/1.1" 200 6418
+"GET /static/css/realizar_pago.css HTTP/1.1" 304 0
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/historial_pago/ HTTP/1.1" 200 3633
+"GET /static/css/historial.css HTTP/1.1" 304 0
+"GET /static/app/historial.js HTTP/1.1" 304 0
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2706
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/solicitudes/ HTTP/1.1" 200 3049
+Not Found: /condominio/solicitudes/styles.css
+"GET /condominio/solicitudes/styles.css HTTP/1.1" 404 5449
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/solicitudes/ HTTP/1.1" 200 3049
+Not Found: /condominio/solicitudes/styles.css
+"GET /condominio/solicitudes/styles.css HTTP/1.1" 404 5449
+"GET /condominio/solicitudes/ HTTP/1.1" 200 4484
+Not Found: /condominio/solicitudes/styles.css
+"GET /condominio/solicitudes/styles.css HTTP/1.1" 404 5449
+"GET /condominio/solicitudes/ HTTP/1.1" 200 4453
+Not Found: /condominio/solicitudes/styles.css
+"GET /condominio/solicitudes/styles.css HTTP/1.1" 404 5449
+"GET /condominio/solicitudes/ HTTP/1.1" 200 1436
+"GET /static/css/solicitud.css HTTP/1.1" 404 1983
+"GET /condominio/dashboard/ HTTP/1.1" 200 8949
+"GET /condominio/solicitudes/ HTTP/1.1" 200 1436
+"GET /static/css/solicitud.css HTTP/1.1" 404 1983
+"GET /condominio/solicitudes/ HTTP/1.1" 200 1436
+"GET /static/css/solicitud.css HTTP/1.1" 200 2276

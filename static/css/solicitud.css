@@ -1,0 +1,121 @@
+  /* Estilo general */
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Estilo del contenedor principal */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+/* Título */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Grupo del formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 1em;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+}
+
+textarea {
+    resize: none;
+}
+
+/* Botón */
+button {
+    width: 100%;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background: #357ab7;
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Enlace con estilo de botón */
+a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.btn {
+    background-color: #ff5252;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+a.btn:hover {
+    background-color: #e04e4e;
+}
+
+/* Agregar espacio entre los campos */
+.mt-4 {
+    margin-top: 30px;
+}

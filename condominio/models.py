@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
+from django.db.models import Sum
+
 
 
 class Departamento(models.Model):
@@ -76,7 +78,7 @@ class Pago(models.Model):
         default='Pendiente'
     )
     fecha_emision = models.DateField(auto_now_add=True)
-    saldo_pendiente = models.FloatField(default=0)
+    saldo_pendienteP = models.FloatField(default=0)
 
     def __str__(self):
         return f"Pago {self.id} - {self.estado}"
@@ -91,6 +93,17 @@ class Factura(models.Model):
     estado = models.CharField(max_length=50, choices=[('Pendiente', 'Pendiente'), ('Pagado', 'Pagado')])
     fecha = models.DateField()
     pago = models.ForeignKey(Pago, null=True, blank=True, on_delete=models.SET_NULL)  # Relación con Pago
+    saldo_pendienteF = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Guarda primero el objeto para que tenga un ID
+
+        # Calcular el total pagado de los pagos relacionados
+        pagos_realizados = Pago.objects.filter(factura=self).aggregate(total_pagado=Sum('monto_pagado'))['total_pagado'] or Decimal('0.00')
+        
+        # Calcular el saldo pendiente restando el monto pagado del monto total
+        self.saldo_pendienteF = self.monto_total - (self.monto_pagado + pagos_realizados)
+        super().save(update_fields=['saldo_pendienteF'])  # Solo actualiza el saldo pendienteF
 
     def __str__(self):
         return f"Factura {self.id} - {self.descripcion}"
@@ -121,13 +134,14 @@ class Edificio(models.Model):
 
 # Modelo Notificacion
 class Notificacion(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificaciones')
+    titulo = models.CharField(max_length=200)
     mensaje = models.TextField()
-    leido = models.BooleanField(default=False)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_envio = models.DateTimeField(auto_now_add=True)
+    destinatarios = models.ManyToManyField(User, related_name='notificaciones_recibidas')
+    leida = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Notificación para {self.usuario.username}: {self.mensaje}"
+        return self.titulo
 
 # Modelo HistorialCambio
 class HistorialCambio(models.Model):

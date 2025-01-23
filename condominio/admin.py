@@ -3,6 +3,8 @@ from .models import Departamento, Residente, MovimientoDePago, Pago, Factura, Se
 from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext_lazy as _
 from django.utils.dateparse import parse_date
+from django.contrib import admin
+from .models import Notificacion
 
 # Define una clase de AdminSite personalizada
 class MyAdminSite(admin.AdminSite):
@@ -75,7 +77,8 @@ class NotificacionAdmin(admin.ModelAdmin):
     search_fields = ('mensaje', 'usuario__username')
     list_filter = ('leido',)
 
-admin.site.register(Notificacion, NotificacionAdmin)
+
+admin.site.register(Notificacion)
 
 # Personalizando la visualización del Historial de Cambios
 class HistorialCambioAdmin(admin.ModelAdmin):

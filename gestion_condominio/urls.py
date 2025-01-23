@@ -18,6 +18,8 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from condominio import views  # Importa las vistas necesarias
+
 # from condominio.views import custom_404
 
 # Configura el manejador de error 404
@@ -26,7 +28,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),  
-    path('condominio/', include('condominio.urls'))
+     path('accounts/', include('django.contrib.auth.urls')),  # Agrega esta línea
+    path('condominio/', include('condominio.urls')),
+    path('enviar-notificaciones/', views.enviar_notificaciones, name='enviar_notificaciones'),
 ]
 
 # Esta línea es suficiente para servir archivos estáticos en DEBUG=True

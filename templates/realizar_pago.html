@@ -131,8 +131,8 @@
 
         <!-- Saldo Pendiente -->
         <div class="form-group">
-            <label for="saldo_pendiente">Saldo Pendiente</label>
-            <input type="text" id="saldo_pendiente" name="saldo_pendiente" value="{{ total_pendiente|floatformat:2 }}" disabled>
+            <label for="saldo_pendienteF">Saldo Pendiente de Factura</label>
+            <input type="text" id="saldo_pendienteF" name="saldo_pendienteF" value="{{ saldo_pendienteF|floatformat:2 }}" disabled>
         </div>
 
         <!-- Método de Pago -->
@@ -140,8 +140,7 @@
             <label for="metodo_pago">Método de Pago</label>
             <select id="metodo_pago" name="metodo_pago" required>
                 <option value="Transferencia">Transferencia</option>
-                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-                <option value="Efectivo">Efectivo</option>
+                
             </select>
         </div>
 
@@ -160,40 +159,90 @@
 </div>
 
 <script>
-    let saldoPendiente = 0;
+    let saldoPendiente = 0;  // Inicializar el saldo pendiente
 
+    // Función para calcular el total a pagar
     function calcularTotal() {
         let total = 0;
 
         // Calcular total por servicios seleccionados
         document.querySelectorAll('#servicios option:checked').forEach(function(option) {
-            total += parseFloat(option.getAttribute('data-monto'));
+            total += parseMonto(option.getAttribute('data-monto'));
         });
 
         // Calcular total por mantenimientos seleccionados
         document.querySelectorAll('#mantenimientos option:checked').forEach(function(option) {
-            total += parseFloat(option.getAttribute('data-monto'));
+            total += parseMonto(option.getAttribute('data-monto'));
         });
+
+        // Si no se selecciona nada, usa el saldo pendiente
+        if (total === 0) {
+            total = parseMonto(document.getElementById('saldo_pendiente').value);
+        }
 
         // Actualizar el campo "Total a Pagar"
         document.getElementById('total_a_pagar').value = total.toFixed(2);
-        saldoPendiente = total; // Inicializamos el saldo pendiente con el total a pagar
-        actualizarSaldo(); // Actualizamos el saldo pendiente en la UI
+
+        // Actualizar saldo pendiente
+        saldoPendiente = total;
+        actualizarSaldo();  // Llama a la función de actualización de saldo
     }
 
+    // Función para actualizar el saldo pendiente
     function actualizarSaldo() {
-        let montoPagado = parseFloat(document.getElementById('monto_pagado').value) || 0;
+        // Obtener monto pagado ingresado por el usuario
+        let montoPagado = parseMonto(document.getElementById('monto_pagado').value);
         let saldoRestante = saldoPendiente - montoPagado;
 
-        // Actualizamos el saldo pendiente en la interfaz
+        // Asegurarse de que no sea negativo
+        if (saldoRestante < 0) {
+            mostrarError('El monto pagado no puede ser mayor que el saldo pendiente.');
+            saldoRestante = 0;
+        } else {
+            ocultarError();
+        }
+
+        // Actualizar el campo de saldo pendiente
         document.getElementById('saldo_pendiente').value = saldoRestante.toFixed(2);
     }
 
-    // Establecer la fecha actual automáticamente en el campo "Fecha del Pago"
+    // Función para mostrar el mensaje de error
+    function mostrarError(message) {
+        const errorContainer = document.getElementById('error-message');
+        errorContainer.textContent = message;
+        errorContainer.style.display = 'block';
+    }
+
+    // Función para ocultar el mensaje de error
+    function ocultarError() {
+        const errorContainer = document.getElementById('error-message');
+        errorContainer.textContent = '';
+        errorContainer.style.display = 'none';
+    }
+
+    // Función para convertir valores a números
+    function parseMonto(value) {
+        return parseFloat(value) || 0;  // Devuelve 0 si el valor no es numérico
+    }
+
+    // Establecer la fecha actual automáticamente y configurar eventos
     window.onload = function() {
-        calcularTotal();
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('fecha_pago').value = today;
+
+        // Inicializar cálculo de totales
+        calcularTotal();
+
+        // Vincular eventos de cambio a servicios y mantenimientos
+        document.querySelectorAll('#servicios, #mantenimientos').forEach(function(select) {
+            select.addEventListener('change', calcularTotal);
+        });
+
+        // Vincular evento de entrada al monto pagado
+        document.getElementById('monto_pagado').addEventListener('input', actualizarSaldo);
+
+        // Actualizar saldo inicial al cargar la página
+        document.getElementById('saldo_pendiente').value = saldoPendiente.toFixed(2);
     };
 </script>
 

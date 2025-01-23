@@ -7,11 +7,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from django.core.mail import send_mail
 from django.urls import reverse
 from django.db import models 
+from .forms import NotificacionResidenteForm
+from .models import Residente
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.utils import timezone
-from django.db.models import Sum 
+from django.db.models import Sum, F
 from datetime import timedelta
 from .models import Departamento, Pago, Factura, Servicio, Mantenimiento, Edificio, Residente,Notificacion,MovimientoDePago,Residente, Solicitud
 from django.contrib import messages
@@ -20,6 +24,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from decimal import Decimal
 from django.utils import timezone
 from .forms import SolicitudForm
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -182,26 +187,20 @@ def login_residente(request):
     
     return render(request, 'login_residente.html')
 
-
-
-
 @login_required
 def realizar_pago(request):
-    # Obtener el Residente correspondiente al usuario actual
+    # Obtener el residente y el departamento del usuario actual
     residente = Residente.objects.get(user=request.user)
-    # Obtener el Departamento a partir del Residente
     departamento = residente.departamento
     
-    # Obtener los servicios y mantenimientos asociados al departamento
+    # Obtener servicios y mantenimientos pendientes
     servicios = Servicio.objects.filter(departamento=departamento, activo=True)
     mantenimientos = Mantenimiento.objects.filter(departamento=departamento, estado='Pendiente')
-
-    # Calcular el total pagado y pendiente
+    
+    # Obtener facturas y pagos previos
+    facturas = Factura.objects.filter(departamento=departamento, estado='Pendiente')
     total_pagado = Pago.objects.filter(departamento=departamento).aggregate(total=Sum('monto_pagado'))['total'] or Decimal('0.00')
-    total_pendiente = Factura.objects.filter(departamento=departamento, estado='Pendiente').aggregate(total=Sum('monto_total'))['total'] or Decimal('0.00')
-
-    total_servicios = Decimal('0.00')
-    total_mantenimientos = Decimal('0.00')
+    saldo_pendienteF = facturas.aggregate(saldo=Sum('saldo_pendienteF'))['saldo'] or Decimal('0.00')
 
     if request.method == 'POST':
         metodo_pago = request.POST.get('metodo_pago')
@@ -209,107 +208,86 @@ def realizar_pago(request):
         servicios_seleccionados = request.POST.getlist('servicios')
         mantenimientos_seleccionados = request.POST.getlist('mantenimientos')
 
-        # Validación para asegurar que se seleccionen al menos servicios o mantenimientos
-        if not servicios_seleccionados and not mantenimientos_seleccionados:
-            messages.error(request, "Debe seleccionar al menos un servicio o mantenimiento.")
-            return redirect('condominio:realizar_pago')
-
-        # Calcular el total de los servicios seleccionados
-        for servicio_id in servicios_seleccionados:
-            servicio = Servicio.objects.get(id=servicio_id)
-            total_servicios += servicio.monto
-
-        # Calcular el total de los mantenimientos seleccionados
-        for mantenimiento_id in mantenimientos_seleccionados:
-            mantenimiento = Mantenimiento.objects.get(id=mantenimiento_id)
-            total_mantenimientos += mantenimiento.monto
-
-        total = total_servicios + total_mantenimientos  # Total combinado de servicios y mantenimientos
-        
-        # Verificar si ya existe una factura pendiente
-        factura = Factura.objects.filter(departamento=departamento, estado='Pendiente').first()
-
-        # Si no existe factura pendiente, se crea una nueva
+        # Obtener o crear una factura pendiente
+        factura = facturas.first()
         if not factura:
+            # Validar selección solo si no hay factura pendiente
+            if not servicios_seleccionados and not mantenimientos_seleccionados:
+                messages.error(request, "Debe seleccionar al menos un servicio o mantenimiento.")
+                return redirect('condominio:realizar_pago')
+
+            # Calcular total seleccionado
+            servicios_qs = Servicio.objects.filter(id__in=servicios_seleccionados)
+            mantenimientos_qs = Mantenimiento.objects.filter(id__in=mantenimientos_seleccionados)
+            total_servicios = servicios_qs.aggregate(total=Sum('monto'))['total'] or Decimal('0.00')
+            total_mantenimientos = mantenimientos_qs.aggregate(total=Sum('monto'))['total'] or Decimal('0.00')
+            total_seleccionado = total_servicios + total_mantenimientos
+
+            # Crear una nueva factura
             factura = Factura.objects.create(
                 departamento=departamento,
-                monto_total=total,
+                monto_total=total_seleccionado,
+                saldo_pendienteF=total_seleccionado,
                 estado='Pendiente',
-                descripcion='Factura por servicios y mantenimientos',
+                descripcion='Factura generada automáticamente',
                 fecha=timezone.now(),
                 usuario=request.user
             )
-        
-        # Actualizar el saldo pendiente de la factura
-        saldo_pendiente = factura.monto_total - factura.monto_pagado
-
-        # Verificar si el monto pagado es suficiente
-        if monto_pagado >= saldo_pendiente:
-            # Si el monto es suficiente para pagar el saldo pendiente
-            factura.monto_pagado += monto_pagado
-            factura.estado = 'Pagado'  # Cambiar el estado a 'Pagado'
-            factura.save()
-
-            # Crear el registro de pago
-            pago = Pago.objects.create(
-                usuario=request.user,
-                departamento=departamento,
-                monto=total,
-                metodo_pago=metodo_pago,
-                monto_pagado=monto_pagado,
-                estado='Pagado',
-            )
-
-            # Asignar los servicios y mantenimientos seleccionados usando el método .set() para relaciones ManyToMany
-            servicios_seleccionados_qs = Servicio.objects.filter(id__in=servicios_seleccionados)
-            pago.servicios.set(servicios_seleccionados_qs)
-
-            mantenimientos_seleccionados_qs = Mantenimiento.objects.filter(id__in=mantenimientos_seleccionados)
-            pago.mantenimientos.set(mantenimientos_seleccionados_qs)
-
-            # Marcar los mantenimientos como "Pagados"
-            Mantenimiento.objects.filter(id__in=mantenimientos_seleccionados).update(estado='Pagado')
-
-            # Mostrar mensaje de éxito
-            messages.success(request, "Pago realizado exitosamente.")
-            return redirect('condominio:dashboard')
-
         else:
-            # Si el monto pagado es menor que el saldo pendiente
+            # Si ya existe una factura, no es necesario seleccionar servicios/mantenimientos
+            total_seleccionado = factura.saldo_pendienteF
+
+        # Validar el monto del pago
+        if monto_pagado > total_seleccionado:
+            messages.error(request, "El monto pagado no puede superar el saldo pendiente.")
+            return redirect('condominio:realizar_pago')
+
+        # Actualizar factura según el monto pagado
+        if monto_pagado >= factura.saldo_pendienteF:
             factura.monto_pagado += monto_pagado
-            saldo_pendiente = factura.monto_total - factura.monto_pagado
-            factura.save()
+            factura.saldo_pendienteF = Decimal('0.00')
+            factura.estado = 'Pagado'
+        else:
+            factura.monto_pagado += monto_pagado
+            factura.saldo_pendienteF -= monto_pagado
 
-            # Crear el registro de pago con monto parcial
-            pago = Pago.objects.create(
-                usuario=request.user,
-                departamento=departamento,
-                monto=total,
-                metodo_pago=metodo_pago,
-                monto_pagado=monto_pagado,
-                estado='Pendiente',
-                saldo_pendiente=saldo_pendiente,
-            )
+        factura.save()
 
-            # Asignar los servicios y mantenimientos seleccionados
-            servicios_seleccionados_qs = Servicio.objects.filter(id__in=servicios_seleccionados)
-            pago.servicios.set(servicios_seleccionados_qs)
+        # Crear registro del pago
+        pago = Pago.objects.create(
+            usuario=request.user,
+            departamento=departamento,
+            monto=total_seleccionado,
+            metodo_pago=metodo_pago,
+            monto_pagado=monto_pagado,
+            saldo_pendienteP=factura.saldo_pendienteF,
+            estado=factura.estado
+        )
 
-            mantenimientos_seleccionados_qs = Mantenimiento.objects.filter(id__in=mantenimientos_seleccionados)
-            pago.mantenimientos.set(mantenimientos_seleccionados_qs)
+        # Asociar servicios y mantenimientos al pago si se seleccionaron
+        if not facturas.exists():
+            servicios_qs = Servicio.objects.filter(id__in=servicios_seleccionados)
+            mantenimientos_qs = Mantenimiento.objects.filter(id__in=mantenimientos_seleccionados)
+            pago.servicios.set(servicios_qs)
+            pago.mantenimientos.set(mantenimientos_qs)
 
-            # Mostrar mensaje de éxito con saldo pendiente
-            messages.success(request, f"Pago parcial realizado. Saldo pendiente: ${saldo_pendiente:.2f}")
-            return redirect('condominio:dashboard')
+            # Marcar mantenimientos como pagados
+            mantenimientos_qs.update(estado='Pagado')
+
+        # Mensaje de éxito
+        if factura.estado == 'Pagado':
+            messages.success(request, "Pago realizado exitosamente.")
+        else:
+            messages.success(request, f"Pago parcial realizado. Saldo pendiente: ${factura.saldo_pendienteF:.2f}")
+
+        return redirect('condominio:dashboard')
 
     return render(request, 'realizar_pago.html', {
         'servicios': servicios,
         'mantenimientos': mantenimientos,
         'departamento': departamento,
-        'total_servicios': total_servicios,
-        'total_mantenimientos': total_mantenimientos,
         'total_pagado': total_pagado,
-        'total_pendiente': total_pendiente,
+        'saldo_pendienteF': saldo_pendienteF,  # Aquí se pasa el saldo pendiente de factura
     })
 
 @login_required
@@ -325,8 +303,9 @@ def dashboard(request):
 
     servicios = Servicio.objects.all()
     mantenimientos = Mantenimiento.objects.all()
-    # Calcular el total pendiente de las facturas
-    total_pendiente = Factura.objects.filter(departamento=departamento, estado='Pendiente').aggregate(total=Sum('monto_total'))['total'] or Decimal('0.00')
+    
+    # Ajustar el total pendiente para reflejar el saldo pendiente
+    total_pendiente = Factura.objects.filter(departamento=departamento, estado='Pendiente').aggregate(total=Sum('saldo_pendienteF'))['total'] or Decimal('0.00')
 
     # Calcular el total pagado de las facturas
     total_pagado = Pago.objects.filter(departamento=departamento).aggregate(total=Sum('monto_pagado'))['total'] or Decimal('0.00')
@@ -360,12 +339,44 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
+def es_administrador(user):
+    return user.is_staff or user.is_superuser
+
+@user_passes_test(es_administrador)
+def enviar_notificaciones(request):
+    residentes = Residente.objects.all()
+    
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        mensaje = request.POST.get('mensaje')
+        destinatarios = request.POST.getlist('destinatarios')
+        
+        if not titulo or not mensaje or not destinatarios:
+            messages.error(request, 'Todos los campos son obligatorios')
+            return render(request, 'condominio/enviar_notificaciones.html', {'residentes': residentes})
+        
+        try:
+            notificacion = Notificacion.objects.create(
+                titulo=titulo,
+                mensaje=mensaje
+            )
+            # Agregar los destinatarios seleccionados
+            usuarios_destinatarios = User.objects.filter(id__in=destinatarios)
+            notificacion.destinatarios.set(usuarios_destinatarios)
+            
+            messages.success(request, 'Notificación enviada exitosamente')
+            return redirect('condominio:dashboard')
+        except Exception as e:
+            messages.error(request, f'Error al enviar la notificación: {str(e)}')
+    
+    return render(request, 'condominio/enviar_notificaciones.html', {'residentes': residentes})
 
 def index(request):
     return render(
         request,
         'index.html',    
     )
+    
 
 @login_required
 def historial_pago(request):
@@ -397,3 +408,4 @@ def solicitudes(request):
         form = SolicitudForm()
 
     return render(request, 'solicitudes.html', {'form': form, 'mensaje': mensaje})
+

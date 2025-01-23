@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-6g)n$$a9u9^@y)n3qb&sh09@x!y77#3vi^@jfhro9qy^bl2-%b
 DEBUG = True
 # DEBUG = False
 
-ALLOWED_HOSTS = ["Condominio.com"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -161,11 +161,9 @@ EMAIL_HOST = 'smtp.gmail.com'  # Servidor de correo de Gmail
 EMAIL_PORT = 587  # Puerto de Gmail
 EMAIL_USE_TLS = True  # Usar TLS (recomendado)
 EMAIL_HOST_USER = 'ricarberri@gmail.com'  # Tu correo de Gmail
-EMAIL_HOST_PASSWORD = 'Tlkmi89#._'  # La contraseña de tu correo de Gmail (o usa una contraseña de aplicación)
+EMAIL_HOST_PASSWORD = 'tgpu rgvq yynp wxwn'  # La contraseña de tu correo de Gmail (o usa una contraseña de aplicación)
 DEFAULT_FROM_EMAIL = 'ricarberri@gmail.com'  # Correo desde el cual se enviarán los mensajes
 
-# Para pruebas locales, si no quieres enviar correos reales
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Muestra los correos en la consola
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views # Cambiamos la importación
+from . import views 
 from django.contrib.auth import views as auth_views
 from condominio import views
 app_name= "condominio"
@@ -16,4 +16,5 @@ urlpatterns = [
     path('realizar_pago/', views.realizar_pago, name='realizar_pago'),
     path('solicitudes/', views.solicitudes, name='solicitudes'),
     path('salida/', views.salida, name= 'salida'),
-]
+    path('enviar-notificaciones/', views.enviar_notificaciones, name='enviar_notificaciones'),
+      ]

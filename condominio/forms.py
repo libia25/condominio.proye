@@ -158,3 +158,15 @@ class SolicitudForm(forms.ModelForm):
     titulo = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título de la solicitud'}))
     descripcion = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripción detallada'}))     
 
+class NotificacionResidenteForm(forms.Form):
+    residentes = forms.ModelMultipleChoiceField(
+        queryset=Residente.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Selecciona a los residentes"
+    )
+    asunto = forms.CharField(max_length=100, label="Asunto")
+    mensaje_base = forms.CharField(
+        widget=forms.Textarea,
+        label="Mensaje Base",
+        help_text="Puedes usar {{ nombre }} y {{ deuda_pendiente }} para personalizar."
+    )
